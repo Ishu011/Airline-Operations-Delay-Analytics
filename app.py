@@ -70,18 +70,18 @@ def load_and_process_data():
         difficulty_cols = [c for c in merged_df.columns if 'difficulty' in c.lower() or 'score' in c.lower()]
         if difficulty_cols:
             merged_df.rename(columns={difficulty_cols[0]: 'flight_difficulty_score'}, inplace=True)
-            st.info(f" Detected difficulty column: `{difficulty_cols[0]}` renamed to `flight_difficulty_score`")
+            st.info(f"Detected difficulty column: `{difficulty_cols[0]}` renamed to `flight_difficulty_score`")
         else:
             merged_df['flight_difficulty_score'] = np.random.randint(1, 100, merged_df.shape[0])
-            st.warning("⚠️ No difficulty column detected. Using random demo values.")
+            st.warning("No difficulty column detected. Using random demo values.")
 
         return flight_df, pnr_df, bag_df, remark_df, airport_df, merged_df
 
     except FileNotFoundError as e:
-        st.error(f" Error: Missing file - {e}. Please ensure all CSV files are uploaded.")
+        st.error(f"Error: Missing file - {e}. Please ensure all CSV files are uploaded.")
         return None, None, None, None, None, pd.DataFrame()
     except Exception as e:
-        st.error(f" Unexpected error loading data: {e}")
+        st.error(f"Unexpected error loading data: {e}")
         return None, None, None, None, None, pd.DataFrame()
 
 with st.spinner("Loading data..."):
@@ -90,7 +90,7 @@ with st.spinner("Loading data..."):
 # -----------------------------------------------
 # 3️⃣ Sidebar Filters with Session State
 # -----------------------------------------------
-st.sidebar.header(" Filters")
+st.sidebar.header("Filters")
 
 if "filter_state" not in st.session_state:
     st.session_state.filter_state = {"carrier": "All", "date_range": None}
@@ -114,11 +114,11 @@ if df is not None and "scheduled_departure_date_local" in df.columns:
         df = df[mask]
 
 if df is not None:
-    st.sidebar.write(f" Total Flights: {len(df)}")
+    st.sidebar.write(f"Total Flights: {len(df)}")
 else:
-    st.sidebar.write(" Total Flights: N/A")
+    st.sidebar.write("Total Flights: N/A")
 
-if st.sidebar.button("🔄 Clear Cache & Refresh"):
+if st.sidebar.button("Clear Cache & Refresh"):
     st.cache_data.clear()
     st.rerun()
 
@@ -134,11 +134,11 @@ if df is not None:
     on_time_pct = (df["departure_delay_mins"] <= 15).mean() * 100
 
     col1.metric("✈️ Avg Departure Delay (min)", f"{avg_dep_delay:.1f}" if not np.isnan(avg_dep_delay) else "N/A")
-    col2.metric("🛬 Avg Arrival Delay (min)", f"{avg_arr_delay:.1f}" if not np.isnan(avg_arr_delay) else "N/A")
-    col3.metric("⏱ Avg Ground Time (min)", f"{avg_ground_time:.1f}" if not np.isnan(avg_ground_time) else "N/A")
-    col4.metric(" On-Time Flights (%)", f"{on_time_pct:.1f}%" if not np.isnan(on_time_pct) else "N/A")
+    col2.metric("Avg Arrival Delay (min)", f"{avg_arr_delay:.1f}" if not np.isnan(avg_arr_delay) else "N/A")
+    col3.metric("🧳 Avg Ground Time (min)", f"{avg_ground_time:.1f}" if not np.isnan(avg_ground_time) else "N/A")
+    col4.metric("On-Time Flights (%)", f"{on_time_pct:.1f}%" if not np.isnan(on_time_pct) else "N/A")
 else:
-    st.warning("⚠️ No data available to display KPIs.")
+    st.warning("No data available to display KPIs.")
 
 st.markdown("---")
 
@@ -150,7 +150,7 @@ if df is not None:
 
     # --- TAB 1: Delay Analysis ---
     with tab1:
-        st.subheader(" Delay Distribution")
+        st.subheader("Delay Distribution")
         fig1 = px.histogram(
             df, x="departure_delay_mins", nbins=40,
             title="Departure Delay Distribution",
@@ -162,8 +162,7 @@ if df is not None:
         fig2 = px.scatter(
             df, x="departure_delay_mins", y="arrival_delay_mins",
             color="carrier", title="Departure vs Arrival Delay",
-            labels={"departure_delay_mins": "Departure Delay (min)", "arrival_delay_mins": "Arrival Delay (min)"},
-            trendline="ols"
+            labels={"departure_delay_mins": "Departure Delay (min)", "arrival_delay_mins": "Arrival Delay (min)"}
         )
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -209,7 +208,7 @@ if df is not None:
 
     # --- TAB 4: Flight Difficulty ---
     with tab4:
-        st.subheader(" Flight Difficulty Analysis")
+        st.subheader("Flight Difficulty Analysis")
         fig6 = px.histogram(
             df, x="flight_difficulty_score", nbins=30,
             title="Flight Difficulty Distribution",
@@ -225,17 +224,17 @@ if df is not None:
             title="Average Difficulty by Carrier", color="carrier",
             color_discrete_sequence=["#1f77b4", "#ff7f0e"],
             text=avg_difficulty["flight_difficulty_score"].round(1),
-            text_auto=True  # Replaced textposition with text_auto
+            text_auto=True
         )
         st.plotly_chart(fig7, use_container_width=True)
 else:
-    st.warning("⚠️ No data available to display visualizations.")
+    st.warning("No data available to display visualizations.")
 
 # -----------------------------------------------
 # 6️⃣ Footer
 # -----------------------------------------------
-st.markdown("""
+st.markdown(f"""
 ---
- *Developed by ISHU & Parul | Team Name: Code2Data* | Flight Analytics for Hackathon 2025  
- Powered by Streamlit, Plotly, and Pandas | © 05-10-2025}
+Developed by ISHU & Parul | Team Name: Code2Data | Flight Analytics for Hackathon 2025  
+Powered by Streamlit, Plotly, and Pandas | © {datetime.now().year}
 """)
