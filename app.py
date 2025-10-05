@@ -237,5 +237,5 @@ else:
 st.markdown("""
 ---
 🚀 *Developed by ISHU & Parul | Team Name: Code2Data* | Flight Analytics for Hackathon 2025  
-💡 Powered by Streamlit, Plotly, and Pandas | © {datetime.now().year}
+💡 Powered by Streamlit, Plotly, and Pandas | © 05-10-2025}
 """)
