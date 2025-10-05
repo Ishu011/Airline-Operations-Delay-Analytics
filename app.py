@@ -70,7 +70,7 @@ def load_and_process_data():
         difficulty_cols = [c for c in merged_df.columns if 'difficulty' in c.lower() or 'score' in c.lower()]
         if difficulty_cols:
             merged_df.rename(columns={difficulty_cols[0]: 'flight_difficulty_score'}, inplace=True)
-            st.info(f"🧠 Detected difficulty column: `{difficulty_cols[0]}` renamed to `flight_difficulty_score`")
+            st.info(f" Detected difficulty column: `{difficulty_cols[0]}` renamed to `flight_difficulty_score`")
         else:
             merged_df['flight_difficulty_score'] = np.random.randint(1, 100, merged_df.shape[0])
             st.warning("⚠️ No difficulty column detected. Using random demo values.")
@@ -78,10 +78,10 @@ def load_and_process_data():
         return flight_df, pnr_df, bag_df, remark_df, airport_df, merged_df
 
     except FileNotFoundError as e:
-        st.error(f"❌ Error: Missing file - {e}. Please ensure all CSV files are uploaded.")
+        st.error(f" Error: Missing file - {e}. Please ensure all CSV files are uploaded.")
         return None, None, None, None, None, pd.DataFrame()
     except Exception as e:
-        st.error(f"❌ Unexpected error loading data: {e}")
+        st.error(f" Unexpected error loading data: {e}")
         return None, None, None, None, None, pd.DataFrame()
 
 with st.spinner("Loading data..."):
@@ -114,9 +114,9 @@ if df is not None and "scheduled_departure_date_local" in df.columns:
         df = df[mask]
 
 if df is not None:
-    st.sidebar.write(f"📊 Total Flights: {len(df)}")
+    st.sidebar.write(f" Total Flights: {len(df)}")
 else:
-    st.sidebar.write("📊 Total Flights: N/A")
+    st.sidebar.write(" Total Flights: N/A")
 
 if st.sidebar.button("🔄 Clear Cache & Refresh"):
     st.cache_data.clear()
@@ -150,7 +150,7 @@ if df is not None:
 
     # --- TAB 1: Delay Analysis ---
     with tab1:
-        st.subheader("📊 Delay Distribution")
+        st.subheader(" Delay Distribution")
         fig1 = px.histogram(
             df, x="departure_delay_mins", nbins=40,
             title="Departure Delay Distribution",
@@ -209,7 +209,7 @@ if df is not None:
 
     # --- TAB 4: Flight Difficulty ---
     with tab4:
-        st.subheader("🧠 Flight Difficulty Analysis")
+        st.subheader(" Flight Difficulty Analysis")
         fig6 = px.histogram(
             df, x="flight_difficulty_score", nbins=30,
             title="Flight Difficulty Distribution",
@@ -236,6 +236,6 @@ else:
 # -----------------------------------------------
 st.markdown("""
 ---
-🚀 *Developed by ISHU & Parul | Team Name: Code2Data* | Flight Analytics for Hackathon 2025  
-💡 Powered by Streamlit, Plotly, and Pandas | © 05-10-2025}
+ *Developed by ISHU & Parul | Team Name: Code2Data* | Flight Analytics for Hackathon 2025  
+ Powered by Streamlit, Plotly, and Pandas | © 05-10-2025}
 """)
