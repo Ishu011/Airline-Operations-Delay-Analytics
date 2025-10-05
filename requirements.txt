@@ -2,3 +2,4 @@ streamlit
 plotly
 pandas
 numpy
+statsmodels==0.14.2
